@@ -6,32 +6,14 @@ const initialState = {
 };
 
 export default handleActions({
-  GET_INFO: {
-    next(state, action) {
-      return {
-        ...state,
-        list: action.payload,
-      };
-    },
-    throw(state) {
-      return {
-        ...state,
-      };
-    },
-  },
-  GET_SCHEDULE: {
-    next(state, action) {
-      return {
-        ...state,
-        schedule: action.payload,
-      };
-    },
-    throw(state) {
-      return {
-        ...state,
-      };
-    },
-  },
+  GET_INFO: (state, action) => ({
+    ...state,
+    list: action.payload,
+  }),
+  GET_SCHEDULE: (state, action) => ({
+    ...state,
+    schedule: action.payload,
+  }),
   default: state => ({
     ...state,
   }),

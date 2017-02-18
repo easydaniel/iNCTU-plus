@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 export const sectionMap = {
   A: {
     from: '08:00',
@@ -64,3 +66,42 @@ export const sectionMap = {
     to: '22:20',
   },
 };
+
+export const modiftyAccountData = AccountData => new Promise((resolve, reject) => {
+  try {
+    const modified = _.pickBy(AccountData, (value, key) => !_.startsWith(key, '@'));
+    if (_.isEmpty(modified)) {
+      reject({ msg: 'login' });
+    }
+    resolve(modified);
+  } catch (e) {
+    reject({ msg: 'login' });
+  }
+});
+
+export const SortByDay = (schedule) => {
+  const result = {};
+  _.forEach(schedule, (value, key) => {
+    const week = [[], [], [], [], [], [], []];
+    value.forEach(({ CourseName, CourseTimeData }) => {
+      [1, 2, 3, 4, 5, 6, 7].forEach((idx) => {
+        if (_.find(CourseTimeData, ['WeekDay', idx.toString()])) {
+          const { RoomNo } = _.head(CourseTimeData);
+          week[idx - 1].push({
+            CourseName,
+            RoomNo,
+            Sections: _.filter(CourseTimeData,
+               ({ WeekDay }) => WeekDay === idx.toString()).map(({ Section }) => Section),
+          });
+        }
+      });
+    });
+    result[key] = week.map(w => _.sortBy(w, ({ Sections }) => sectionMap[_.head(Sections)].from));
+  });
+  return result;
+};
+
+export const GetSchedule = schedule => SortByDay(_.groupBy(schedule.map(
+  ({ CourseName, CrsYear, CrsSemester, CourseTimeData }) => ({
+    CourseName, CrsYear, CrsSemester, CourseTimeData })),
+  ({ CrsYear, CrsSemester }) => (CrsYear + CrsSemester)));

@@ -5,19 +5,10 @@ const initialState = {
 };
 
 export default handleActions({
-  LOGIN: {
-    next(state, action) {
-      return {
-        ...state,
-        user: action.payload,
-      };
-    },
-    throw(state) {
-      return {
-        ...state,
-      };
-    },
-  },
+  LOGIN: (state, action) => ({
+    ...state,
+    user: action.payload,
+  }),
   default: state => ({
     ...state,
   }),

@@ -37,7 +37,7 @@ class Login extends Component {
 
   login() {
     const { account, password } = this.state;
-    this.setState({ status: 'LOGGING IN' });
+    this.setState({ status: 'LOADING' });
     this.props.login(account, password)
       .done(({ error }) => (error ? this.setState({ status: 'RETRY' }) : Actions.tabbar()));
   }
@@ -90,6 +90,7 @@ class Login extends Component {
             underlayColor={'#FFFFFF'}
             activeOpacity={0.6}
             onPress={() => this.login()}
+            disabled={status === 'LOADING'}
           >
             <Text style={styles.action}>
               {status}

@@ -13,7 +13,6 @@ import {
   Dimensions,
   TouchableHighlight,
   StatusBar,
-  TouchableWithoutFeedback,
 } from 'react-native';
 
 import styles from '../styles/schedule';
@@ -32,8 +31,6 @@ const mapDispatchToProps = dispatch => bindActionCreators({
 
 const { width } = Dimensions.get('window');
 
-import { SortByDay } from '../api/xmlparser';
-
 class Schedule extends Component {
 
   constructor(props) {
@@ -50,11 +47,10 @@ class Schedule extends Component {
     this.props.getCourseInfo(LoginTicket, AccountId, 'stu')
       .then(({ payload }) => this.props.getSchedule(payload))
       .then(() => this.initSchedule())
-      .then(() => this.dayScrollView.scrollTo({ x: (current - 1) * width, animated: false }));
+      .done(() => this.dayScrollView.scrollTo({ x: (current - 1) * width, animated: false }));
   }
 
   initSchedule() {
-    const { current } = this.state;
     const { schedule } = this.props.course;
     this.setState({ loading: false, semester: Object.keys(schedule)[0] });
     // Picker init
@@ -71,6 +67,7 @@ class Schedule extends Component {
       },
     });
     Picker.hide();
+    // Make sure scroll event not fired
     setTimeout(() => this.setState({ delay: false }), 200);
   }
 
@@ -115,26 +112,26 @@ class Schedule extends Component {
             <Text
               style={styles.scheduleSelectText}
             >
-              {semester}
+              {semester}<EntypoIcons name="chevron-down" size={20} />
             </Text>
           </TouchableHighlight>
         </View>
         <View style={styles.dayNavigator}>
           {
-          ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'].map((value, index) => (
-            <TouchableHighlight
-              key={index}
-              style={styles.dayNavigatorContainer}
-              underlayColor={'transparent'}
-              activeOpacity={0.5}
-              onPressIn={() => this.handlePressIndicator(index + 1)}
-            >
-              <Text style={styles.dayNavigatorText}>
-                {value}
-              </Text>
-            </TouchableHighlight>
-          ))
-        }
+            ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'].map((value, index) => (
+              <TouchableHighlight
+                key={index}
+                style={styles.dayNavigatorContainer}
+                underlayColor={'transparent'}
+                activeOpacity={0.5}
+                onPressIn={() => this.handlePressIndicator(index + 1)}
+              >
+                <Text style={styles.dayNavigatorText}>
+                  {value}
+                </Text>
+              </TouchableHighlight>
+            ))
+          }
         </View>
         <View style={[styles.dayNavigatorIndicator, { left }]} />
         <ScrollView
@@ -161,7 +158,7 @@ class Schedule extends Component {
                       <View>
                         <Text />
                       </View> :
-                    list.map(({ CourseName, Section, RoomNo }) => (
+                    list.map(({ CourseName, Sections, RoomNo }) => (
                       <View key={CourseName} style={styles.timeContainer}>
                         <Text style={styles.courseName}>
                           {CourseName}
@@ -182,8 +179,8 @@ class Schedule extends Component {
                           color={'rgb(137,135,231)'}
                           size={18}
                         >
-                          <Text style={styles.courseTime}>{this.getTimeString(Section)}</Text>
-                          <Text style={styles.courseSection}>{`時段: ${Section.join('')}`}</Text>
+                          <Text style={styles.courseTime}>{this.getTimeString(Sections)}</Text>
+                          <Text style={styles.courseSection}>{`時段: ${Sections.join('')}`}</Text>
                         </MaterialCommunityIcons.Button>
                       </View>
                     ))
