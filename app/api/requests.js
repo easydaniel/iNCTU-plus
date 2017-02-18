@@ -5,6 +5,7 @@ import {
   parseCourseTime,
 } from './xmlparser';
 
+// const host = 'http://140.113.66.97:3019/';
 const hostname = 'http://140.113.8.133/mService/service.asmx';
 
 export const Login = (account, password) => fetch(`${hostname}/Login?${querystring.stringify({ account, password })}`, {

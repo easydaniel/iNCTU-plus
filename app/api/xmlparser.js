@@ -50,6 +50,29 @@ export const parseCourseInfo = xml => new Promise((resolve, reject) => {
   }
 });
 
-export const GroupBySemester = schedule => _.groupBy(schedule.map(
-  ({ CourseName, CrsYear, CrsSemester, CrsTime, RoomNo }) => ({ CourseName, CrsYear, CrsSemester, CrsTime, RoomNo })),
-  ({ CrsYear, CrsSemester }) => (CrsYear + CrsSemester));
+export const SortByDay = (schedule) => {
+  const result = {};
+  _.forEach(schedule, (value, key) => {
+    const week = [[], [], [], [], [], [], []];
+    value.forEach(({ CourseName, CrsTime, RoomNo }) => {
+      [1, 2, 3, 4, 5, 6, 7].forEach((idx) => {
+        if (_.find(CrsTime, ['day', idx.toString()])) {
+          week[idx - 1].push({
+            CourseName,
+            RoomNo,
+            Section: _.filter(CrsTime,
+               ({ day }) => day === idx.toString()).map(({ section }) => section),
+          });
+        }
+      });
+    });
+    // #TODO Sort time sections
+    result[key] = week;
+  });
+  return result;
+};
+
+export const GetSchedule = schedule => SortByDay(_.groupBy(schedule.map(
+  ({ CourseName, CrsYear, CrsSemester, CrsTime, RoomNo }) => ({
+    CourseName, CrsYear, CrsSemester, CrsTime, RoomNo })),
+  ({ CrsYear, CrsSemester }) => (CrsYear + CrsSemester)));

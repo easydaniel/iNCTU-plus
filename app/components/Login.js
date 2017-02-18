@@ -15,6 +15,7 @@ import {
 import styles from '../styles/auth';
 import * as AuthActions from '../actions/auth';
 
+
 const mapStateToProps = state => ({
   auth: state.auth,
 });
