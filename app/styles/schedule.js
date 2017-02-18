@@ -86,6 +86,7 @@ export default StyleSheet.create({
     marginTop: 26,
     paddingLeft: 12,
     paddingTop: 10,
+    flex: 1,
   },
   courseName: {
     fontSize: 16,
@@ -103,6 +104,11 @@ export default StyleSheet.create({
     padding: 0,
   },
   courseTime: {
+    flex: 2,
+    color: 'rgba(0,0,0,.6)',
+  },
+  courseSection: {
+    flex: 1,
     color: 'rgba(0,0,0,.6)',
   },
 });

@@ -91,7 +91,7 @@ class Schedule extends Component {
   }
 
   getTimeString(section) {
-    return `${sectionMap[_.head(section)].from} ~ ${sectionMap[_.last(section)].to}  時段: ${section.join('')}`;
+    return `${sectionMap[_.head(section)].from} ~ ${sectionMap[_.last(section)].to}`;
   }
 
   render() {
@@ -183,6 +183,7 @@ class Schedule extends Component {
                           size={18}
                         >
                           <Text style={styles.courseTime}>{this.getTimeString(Section)}</Text>
+                          <Text style={styles.courseSection}>{`時段: ${Section.join('')}`}</Text>
                         </MaterialCommunityIcons.Button>
                       </View>
                     ))
