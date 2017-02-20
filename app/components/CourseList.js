@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
-import Octicons from 'react-native-vector-icons/Octicons';
+// import Octicons from 'react-native-vector-icons/Octicons';
 import EntypoIcons from 'react-native-vector-icons/Entypo';
 import Picker from 'react-native-picker';
 import {
@@ -31,38 +31,14 @@ const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 
 class CourseList extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      semester: null,
-    };
-  }
-
-  componentWillMount() {
-    const { user: { LoginTicket, AccountId } } = this.props.auth;
-    this.props.getCourseInfo(LoginTicket, AccountId, 'stu')
-      .then(() => this.initList());
-  }
-
-  initList() {
-    const { list } = this.props.course;
-    this.setState({ semester: Object.keys(list)[0] });
-    Picker.init({
-      pickerData: Object.keys(list),
-      pickerTitleText: '選擇學期',
-      pickerConfirmBtnText: '確定',
-      pickerCancelBtnText: '',
-      onPickerSelect: ([semester]) => {
-        this.setState({
-          semester,
-        });
-      },
-    });
-    Picker.hide();
+  renderSeparator(sectionId, rowId) {
+    const { list, semester } = this.props.course;
+    return ((list[semester].length - 1).toString() === rowId ? null :
+    <View key={rowId} style={styles.separator} />);
   }
 
   renderRow(course) {
-    const { CourseName, TeacherName } = course;
+    const { CourseName, TeacherName, HomeworkData: { undone } } = course;
     return (
       <TouchableWithoutFeedback
         onPress={() => Actions.course({ course })}
@@ -77,19 +53,6 @@ class CourseList extends Component {
             <Text style={styles.teacherName}>
               {TeacherName}
             </Text>
-            <View style={styles.newInfo} />
-            <View style={styles.homework}>
-              <Octicons
-                name="pencil"
-                size={16}
-              />
-              <Text>
-                {Math.floor(Math.random() * 5)}
-              </Text>
-              <Text style={{ marginLeft: 5, color: 'rgba(0, 0, 0, .3)' }}>
-                03/05 20:30
-              </Text>
-            </View>
           </View>
         </View>
       </TouchableWithoutFeedback>
@@ -97,36 +60,30 @@ class CourseList extends Component {
   }
 
   render() {
-    const { list } = this.props.course;
-    const { semester } = this.state;
-    if (!list || !semester) {
-      return <Loading />;
-    }
-    const dataSource = ds.cloneWithRows(list[semester]);
-    return (
-      <View style={styles.container}>
-        <View style={styles.menuContainer}>
-          <TouchableHighlight
-            style={styles.listSelect}
-            underlayColor={'transparent'}
-            onPress={() => Picker.toggle()}
+    const { list, semester } = this.props.course;
+    return (!semester ? <Loading /> :
+    <View style={styles.container}>
+      <View style={styles.menuContainer}>
+        <TouchableHighlight
+          style={styles.listSelect}
+          underlayColor={'transparent'}
+          onPress={() => Picker.toggle()}
+        >
+          <Text
+            style={styles.listSelectText}
           >
-            <Text
-              style={styles.listSelectText}
-            >
-              {semester}<EntypoIcons name="chevron-down" size={20} />
-            </Text>
-          </TouchableHighlight>
-        </View>
-        <ListView
-          style={styles.listContainer}
-          enableEmptySections
-          dataSource={dataSource}
-          renderRow={row => this.renderRow(row)}
-          renderSeparator={(sectionId, rowId) => ((list[semester].length - 1).toString() === rowId ? null :
-          <View key={rowId} style={styles.separator} />)}
-        />
+            {semester}<EntypoIcons name="chevron-down" size={20} />
+          </Text>
+        </TouchableHighlight>
       </View>
+      <ListView
+        style={styles.listContainer}
+        enableEmptySections
+        dataSource={ds.cloneWithRows(list[semester])}
+        renderRow={row => this.renderRow(row)}
+        renderSeparator={(sectionId, rowId) => this.renderSeparator(sectionId, rowId)}
+      />
+    </View>
     );
   }
 }

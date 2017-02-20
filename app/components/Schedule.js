@@ -42,7 +42,6 @@ class Schedule extends Component {
       loading: true,
       delay: true,
       current: null,
-      semester: null,
     };
   }
 
@@ -53,12 +52,12 @@ class Schedule extends Component {
     this.props.getCourseInfo(LoginTicket, AccountId, 'stu')
       .then(({ payload }) => this.props.getSchedule(payload))
       .then(() => this.initSchedule())
+      .then(() => this.setState({ loading: false }))
       .done(() => this.dayScrollView.scrollTo({ x: (current - 1) * width, animated: false }));
   }
 
   initSchedule() {
     const { schedule } = this.props.course;
-    this.setState({ loading: false, semester: Object.keys(schedule)[0] });
     // Picker init
     Picker.init({
       pickerData: Object.keys(schedule),
@@ -67,9 +66,7 @@ class Schedule extends Component {
       pickerCancelBtnText: '',
       onPickerSelect: ([semester]) => {
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-        this.setState({
-          semester,
-        });
+        this.props.setSemester(semester);
       },
     });
     Picker.hide();
@@ -98,9 +95,9 @@ class Schedule extends Component {
   }
 
   render() {
-    const { loading, current, semester } = this.state;
+    const { loading, current } = this.state;
     const left = 15 + (width / 7) * (current - 1);
-    const { schedule } = this.props.course;
+    const { schedule, semester } = this.props.course;
     return (loading ? <Loading /> :
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />

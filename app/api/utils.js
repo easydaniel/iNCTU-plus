@@ -67,21 +67,18 @@ export const sectionMap = {
   },
 };
 
-export const modiftyAccountData = AccountData => new Promise((resolve, reject) => {
+export const modiftyData = data => new Promise((resolve, reject) => {
   try {
-    const modified = _.pickBy(AccountData, (value, key) => !_.startsWith(key, '@'));
-    if (_.isEmpty(modified)) {
-      reject({ msg: 'login' });
-    }
+    const modified = _.pickBy(data, (value, key) => !_.startsWith(key, '@'));
     resolve(modified);
   } catch (e) {
-    reject({ msg: 'login' });
+    reject({ msg: 'error parsing data', data });
   }
 });
 
 export const SortByDay = (list) => {
   const week = [[], [], [], [], [], [], []];
-  _.forEach(list, ({ CourseName, CourseTimeData }) => {
+  _.each(list, ({ CourseName, CourseTimeData }) => {
     [1, 2, 3, 4, 5, 6, 7].forEach((idx) => {
       if (_.find(CourseTimeData, ['WeekDay', idx.toString()])) {
         const { RoomNo } = _.head(CourseTimeData);
@@ -99,7 +96,7 @@ export const SortByDay = (list) => {
 
 export const GetSchedule = (schedule) => {
   const result = {};
-  _.forEach(schedule, (value, key) => {
+  _.each(schedule, (value, key) => {
     result[key] = SortByDay(value);
   });
   return result;

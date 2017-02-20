@@ -18,7 +18,7 @@ export default StyleSheet.create({
     height: 60,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: 20,
+    paddingTop: 15,
   },
   listSelect: {
     flex: 1,

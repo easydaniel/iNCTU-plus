@@ -4,3 +4,4 @@ import { GetSchedule } from '../api/utils';
 
 export const getCourseInfo = createAction('GET_INFO', GetCourseInfo);
 export const getSchedule = createAction('GET_SCHEDULE', GetSchedule);
+export const setSemester = createAction('SET_SEMESTER');
