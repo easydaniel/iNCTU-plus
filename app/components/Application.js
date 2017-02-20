@@ -13,7 +13,7 @@ import Course from './Course';
 import Basic from './Basic';
 
 // tabIcons
-import { CourseTabIcon, ScheduleTabIcon, SettingTabIcon } from '../api/tabIcon';
+import { CourseTabIcon, ScheduleTabIcon, SettingTabIcon } from './TabIcon';
 
 import styles from '../styles/application';
 

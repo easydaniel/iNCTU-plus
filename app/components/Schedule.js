@@ -20,7 +20,7 @@ import Loading from './Loading';
 import styles from '../styles/schedule';
 import * as CourseActions from '../actions/course';
 
-import { sectionMap } from '../api/utils.js';
+import { sectionMap } from '../utils';
 
 const mapStateToProps = state => ({
   auth: state.auth,
@@ -49,8 +49,24 @@ class Schedule extends Component {
     const { user: { LoginTicket, AccountId } } = this.props.auth;
     const current = (new Date().getDay() + 8) % 8;
     this.setState({ current });
-    this.props.getCourseInfo(LoginTicket, AccountId, 'stu')
-      .then(({ payload }) => this.props.getSchedule(payload))
+    this.props.getCourseList(LoginTicket, AccountId, 'stu')
+      .then(() => {
+        const { list } = this.props.course;
+        return Promise.all(_.map(list, (data, courseId) => {
+          _.each(_.range(1, 5), (listType) => {
+            this.props.getCourseHomework(LoginTicket, AccountId, courseId, listType);
+          });
+          _.each(_.range(1, 3), (bulType) => {
+            this.props.getCourseAnnouncement(LoginTicket, courseId, bulType);
+          });
+          return this.props.getCourseTime(LoginTicket, courseId);
+        }));
+      })
+      .then(() => {
+        const { list } = this.props.course;
+        this.props.groupCourseList();
+        return this.props.getSchedule(list);
+      })
       .then(() => this.initSchedule())
       .then(() => this.setState({ loading: false }))
       .done(() => this.dayScrollView.scrollTo({ x: (current - 1) * width, animated: false }));

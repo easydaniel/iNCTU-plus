@@ -1,50 +1,27 @@
-import querystring from 'querystring';
-import _ from 'lodash';
-import {
-  modiftyData,
-} from './utils';
+import qs from 'querystring';
 
 const hostname = 'https://api.e3.nctu.me';
 // const hostname = 'http://140.113.8.133/mService/service.asmx';
 
-export const Login = (account, password) => fetch(`${hostname}/session/?${querystring.stringify({ account, password })}`, {
+export const Login = (account, password) => fetch(`${hostname}/session/?${qs.stringify({ account, password })}`, {
   method: 'GET',
-}).then(res => res.json())
-  .then(({ AccountData }) => modiftyData(AccountData))
-  .catch(error => console.log('login', error));
+}).then(res => res.json());
 
-export const GetCourseInfo = (loginTicket, accountId, role) => fetch(`${hostname}/courses/?${querystring.stringify({ loginTicket, accountId, role })}`, {
+export const GetCourseList = (loginTicket, accountId, role) => fetch(`${hostname}/courses/?${qs.stringify({ loginTicket, accountId, role })}`, {
+  method: 'GET',
+}).then(res => res.json());
+
+export const GetCourseTime = (loginTicket, CourseId) => fetch(`${hostname}/course/time/?${qs.stringify({ loginTicket, CourseId })}`, {
   method: 'GET',
 }).then(res => res.json())
-  .then(({ ArrayOfCourseData: { CourseData } }) => Promise.all(CourseData.map(
-    async (Course) => {
-      const { CourseId } = Course;
-      /* Course Time */
-      const { ArrayOfCourseTimeData: { CourseTimeData } } = await fetch(`${hostname}/course/time/?${querystring.stringify({ loginTicket, CourseId })}`, {
-        method: 'GET',
-      }).then(res => res.json())
-        .catch(err => console.log('time', err));
-      /* Homework */
-      const hwk = await Promise.all(_.map([1, 2, 3, 4], listType => fetch(`${hostname}/homeworks/?${querystring.stringify({ loginTicket, accountId, courseId: CourseId, listType })}`, {
-        method: 'GET',
-      }).then(res => res.json())
-        .then(({ ArrayOfStuHomeworkData: StuHomeworkData }) => modiftyData(StuHomeworkData))
-        .then(({ StuHomeworkData }) => (StuHomeworkData || []))
-        .catch(err => console.log('homework', err))));
-      const HomeworkData = {};
-      _.each(['undone', 'peer', 'overdue', 'done'], (type, idx) => {
-        HomeworkData[type] = hwk[idx];
-      });
-      /* Announce */
-      const anc = await Promise.all(_.map([1, 2], bulType => fetch(`${hostname}/announcements/?${querystring.stringify({ loginTicket, courseId: CourseId, bulType })}`, {
-        method: 'GET',
-      }).then(res => res.json())
-        .then(({ ArrayOfBulletinData: BulletinData }) => modiftyData(BulletinData))
-        .then(({ BulletinData }) => (BulletinData || []))
-        .catch(err => console.log('announce', err))));
-      const AnnouncementData = _.flatten(anc);
-      return { ...Course, CourseTimeData, HomeworkData, AnnouncementData };
-    },
-  )))
-  .then(CourseList => _.groupBy(CourseList, ({ CrsYear, CrsSemester }) => (CrsYear + CrsSemester)))
-  .catch(err => console.log('course', err));
+  .then(res => ({ ...res, CourseId }));
+
+export const GetCourseHomework = (loginTicket, accountId, courseId, listType) => fetch(`${hostname}/homeworks/?${qs.stringify({ loginTicket, accountId, courseId, listType })}`, {
+  method: 'GET',
+}).then(res => res.json())
+  .then(res => ({ ...res, courseId, listType }));
+
+export const GetCourseAnnouncement = (loginTicket, courseId, bulType) => fetch(`${hostname}/announcements/?${qs.stringify({ loginTicket, courseId, bulType })}`, {
+  method: 'GET',
+}).then(res => res.json())
+  .then(res => ({ ...res, courseId, bulType }));

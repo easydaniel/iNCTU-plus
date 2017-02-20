@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import _ from 'lodash';
 import { Actions } from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Sae } from 'react-native-textinput-effects';
@@ -40,7 +39,7 @@ class Login extends Component {
     const { account, password } = this.state;
     this.setState({ status: 'LOADING' });
     this.props.login(account, password)
-      .done(({ payload }) => (_.isEmpty(payload) ? this.setState({ status: 'RETRY' }) : Actions.tabbar()));
+      .done(({ error }) => (error ? this.setState({ status: 'RETRY' }) : Actions.tabbar()));
   }
 
   render() {

@@ -38,7 +38,7 @@ class CourseList extends Component {
   }
 
   renderRow(course) {
-    const { CourseName, TeacherName, HomeworkData: { undone } } = course;
+    const { CourseName, TeacherName } = course;
     return (
       <TouchableWithoutFeedback
         onPress={() => Actions.course({ course })}

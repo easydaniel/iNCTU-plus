@@ -67,25 +67,18 @@ export const sectionMap = {
   },
 };
 
-export const modiftyData = data => new Promise((resolve, reject) => {
-  try {
-    const modified = _.pickBy(data, (value, key) => !_.startsWith(key, '@'));
-    resolve(modified);
-  } catch (e) {
-    reject({ msg: 'error parsing data', data });
-  }
-});
+export const modiftyData = data => _.pickBy(data, (value, key) => !_.startsWith(key, '@'));
 
 export const SortByDay = (list) => {
-  const week = [[], [], [], [], [], [], []];
-  _.each(list, ({ CourseName, CourseTimeData }) => {
-    [1, 2, 3, 4, 5, 6, 7].forEach((idx) => {
-      if (_.find(CourseTimeData, ['WeekDay', idx.toString()])) {
-        const { RoomNo } = _.head(CourseTimeData);
+  const week = _.times(7, _.stubArray);
+  _.each(list, ({ CourseName, CourseTime }) => {
+    _.range(1, 8).forEach((idx) => {
+      if (_.find(CourseTime, ['WeekDay', idx.toString()])) {
+        const { RoomNo } = _.head(CourseTime);
         week[idx - 1].push({
           CourseName,
           RoomNo,
-          Sections: _.filter(CourseTimeData,
+          Sections: _.filter(CourseTime,
              ({ WeekDay }) => WeekDay === idx.toString()).map(({ Section }) => Section),
         });
       }
@@ -94,10 +87,14 @@ export const SortByDay = (list) => {
   return week.map(w => _.sortBy(w, ({ Sections }) => sectionMap[_.head(Sections)].from));
 };
 
-export const GetSchedule = (schedule) => {
+export const GetSchedule = (list) => {
   const result = {};
-  _.each(schedule, (value, key) => {
-    result[key] = SortByDay(value);
-  });
+  _.each(
+    _.groupBy(
+      list,
+      ({ CrsYear, CrsSemester }) => (CrsYear + CrsSemester)),
+    (schedule, key) => {
+      result[key] = SortByDay(schedule);
+    });
   return result;
 };
