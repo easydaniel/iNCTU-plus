@@ -79,29 +79,28 @@ export const modiftyAccountData = AccountData => new Promise((resolve, reject) =
   }
 });
 
-export const SortByDay = (schedule) => {
+export const SortByDay = (list) => {
+  const week = [[], [], [], [], [], [], []];
+  _.forEach(list, ({ CourseName, CourseTimeData }) => {
+    [1, 2, 3, 4, 5, 6, 7].forEach((idx) => {
+      if (_.find(CourseTimeData, ['WeekDay', idx.toString()])) {
+        const { RoomNo } = _.head(CourseTimeData);
+        week[idx - 1].push({
+          CourseName,
+          RoomNo,
+          Sections: _.filter(CourseTimeData,
+             ({ WeekDay }) => WeekDay === idx.toString()).map(({ Section }) => Section),
+        });
+      }
+    });
+  });
+  return week.map(w => _.sortBy(w, ({ Sections }) => sectionMap[_.head(Sections)].from));
+};
+
+export const GetSchedule = (schedule) => {
   const result = {};
   _.forEach(schedule, (value, key) => {
-    const week = [[], [], [], [], [], [], []];
-    value.forEach(({ CourseName, CourseTimeData }) => {
-      [1, 2, 3, 4, 5, 6, 7].forEach((idx) => {
-        if (_.find(CourseTimeData, ['WeekDay', idx.toString()])) {
-          const { RoomNo } = _.head(CourseTimeData);
-          week[idx - 1].push({
-            CourseName,
-            RoomNo,
-            Sections: _.filter(CourseTimeData,
-               ({ WeekDay }) => WeekDay === idx.toString()).map(({ Section }) => Section),
-          });
-        }
-      });
-    });
-    result[key] = week.map(w => _.sortBy(w, ({ Sections }) => sectionMap[_.head(Sections)].from));
+    result[key] = SortByDay(value);
   });
   return result;
 };
-
-export const GetSchedule = schedule => SortByDay(_.groupBy(schedule.map(
-  ({ CourseName, CrsYear, CrsSemester, CourseTimeData }) => ({
-    CourseName, CrsYear, CrsSemester, CourseTimeData })),
-  ({ CrsYear, CrsSemester }) => (CrsYear + CrsSemester)));

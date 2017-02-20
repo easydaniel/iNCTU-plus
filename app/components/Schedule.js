@@ -15,6 +15,8 @@ import {
   StatusBar,
 } from 'react-native';
 
+import Loading from './Loading';
+
 import styles from '../styles/schedule';
 import * as CourseActions from '../actions/course';
 
@@ -36,14 +38,18 @@ class Schedule extends Component {
   constructor(props) {
     super(props);
     LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);
-    const current = (new Date().getDay() + 8) % 8;
     this.state = {
       loading: true,
       delay: true,
-      current,
+      current: null,
       semester: null,
     };
+  }
+
+  componentWillMount() {
     const { user: { LoginTicket, AccountId } } = this.props.auth;
+    const current = (new Date().getDay() + 8) % 8;
+    this.setState({ current });
     this.props.getCourseInfo(LoginTicket, AccountId, 'stu')
       .then(({ payload }) => this.props.getSchedule(payload))
       .then(() => this.initSchedule())
@@ -95,29 +101,24 @@ class Schedule extends Component {
     const { loading, current, semester } = this.state;
     const left = 15 + (width / 7) * (current - 1);
     const { schedule } = this.props.course;
-    return (loading ?
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>
-          Loading
-        </Text>
-      </View> :
-      <View style={styles.container}>
-        <StatusBar barStyle="light-content" />
-        <View style={styles.scheduleActionContainer}>
-          <TouchableHighlight
-            style={styles.scheduleSelect}
-            underlayColor={'transparent'}
-            onPress={() => Picker.toggle()}
+    return (loading ? <Loading /> :
+    <View style={styles.container}>
+      <StatusBar barStyle="light-content" />
+      <View style={styles.scheduleActionContainer}>
+        <TouchableHighlight
+          style={styles.scheduleSelect}
+          underlayColor={'transparent'}
+          onPress={() => Picker.toggle()}
+        >
+          <Text
+            style={styles.scheduleSelectText}
           >
-            <Text
-              style={styles.scheduleSelectText}
-            >
-              {semester}<EntypoIcons name="chevron-down" size={20} />
-            </Text>
-          </TouchableHighlight>
-        </View>
-        <View style={styles.dayNavigator}>
-          {
+            {semester}<EntypoIcons name="chevron-down" size={20} />
+          </Text>
+        </TouchableHighlight>
+      </View>
+      <View style={styles.dayNavigator}>
+        {
             ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'].map((value, index) => (
               <TouchableHighlight
                 key={index}
@@ -132,18 +133,18 @@ class Schedule extends Component {
               </TouchableHighlight>
             ))
           }
-        </View>
-        <View style={[styles.dayNavigatorIndicator, { left }]} />
-        <ScrollView
-          horizontal
-          pagingEnabled
-          ref={(c) => { this.dayScrollView = c; }}
-          onScroll={evt => this.handleScroll(evt)}
-          scrollEventThrottle={200}
-          showsHorizontalScrollIndicator={false}
-          style={styles.container}
-        >
-          {
+      </View>
+      <View style={[styles.dayNavigatorIndicator, { left }]} />
+      <ScrollView
+        horizontal
+        pagingEnabled
+        ref={(c) => { this.dayScrollView = c; }}
+        onScroll={evt => this.handleScroll(evt)}
+        scrollEventThrottle={200}
+        showsHorizontalScrollIndicator={false}
+        style={styles.container}
+      >
+        {
             schedule[semester].map((list, idx) => (
               <View
                 style={styles.pageContainer}
@@ -189,8 +190,8 @@ class Schedule extends Component {
               </View>
             ))
         }
-        </ScrollView>
-      </View>
+      </ScrollView>
+    </View>
     );
   }
 }

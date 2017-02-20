@@ -7,4 +7,9 @@ export default StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: '#CBCBCB',
   },
+  tabContainer: {
+    flex: 1,
+    justifyContent: 'space-around',
+    marginVertical: 2,
+  },
 });

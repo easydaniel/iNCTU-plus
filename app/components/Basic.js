@@ -12,19 +12,17 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => bindActionCreators({
 }, dispatch);
 
-class Course extends Component {
+class Basic extends Component {
 
   render() {
-    const { course } = this.props.navigationState;
-    const { CourseName } = course;
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgb(157, 139, 220)' }}>
         <Text style={{ fontSize: 20, color: '#FFFFFF' }}>
-          {CourseName}
+          正在趕工中
         </Text>
       </View>
     );
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Course);
+export default connect(mapStateToProps, mapDispatchToProps)(Basic);

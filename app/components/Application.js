@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import { Scene, Router } from 'react-native-router-flux';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // Store
 import configureStore from '../store';
@@ -10,33 +9,13 @@ import configureStore from '../store';
 import Login from './Login';
 import Schedule from './Schedule';
 import CourseList from './CourseList';
+import Course from './Course';
+import Basic from './Basic';
 
-import { Text, View } from 'react-native';
+// tabIcons
+import { CourseTabIcon, ScheduleTabIcon, SettingTabIcon } from '../api/tabIcon';
 
 import styles from '../styles/application';
-
-// TabIcon
-const ScheduleTabIcon = ({ selected, title }) => (
-  <View>
-    <Ionicons
-      style={{ justifyContent: 'center', alignSelf: 'center', color: selected ? 'red' : 'black' }}
-      name="ios-list-box-outline"
-      size={25}
-    />
-    <Text style={{ alignSelf: 'center', color: selected ? 'red' : 'black' }}>{title}</Text>
-  </View>
-);
-
-const CourseTabIcon = ({ selected, title }) => (
-  <View>
-    <Ionicons
-      style={{ justifyContent: 'center', alignSelf: 'center', color: selected ? 'red' : 'black' }}
-      name="ios-book-outline"
-      size={25}
-    />
-    <Text style={{ alignSelf: 'center', color: selected ? 'red' : 'black' }}>{title}</Text>
-  </View>
-);
 
 export default class Application extends Component {
 
@@ -83,13 +62,28 @@ export default class Application extends Component {
               </Scene>
               <Scene
                 key="courseTab"
-                title="課程資訊"
+                title="課程列表"
                 icon={CourseTabIcon}
                 hideNavBar
               >
                 <Scene
-                  key="course"
+                  key="courselist"
                   component={CourseList}
+                />
+                <Scene
+                  key="course"
+                  component={Course}
+                />
+              </Scene>
+              <Scene
+                key="settingTab"
+                title="設定"
+                icon={SettingTabIcon}
+                hideNavBar
+              >
+                <Scene
+                  key="setting"
+                  component={Basic}
                 />
               </Scene>
             </Scene>
