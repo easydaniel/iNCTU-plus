@@ -51,8 +51,8 @@ class Schedule extends Component {
     this.setState({ current });
     this.props.getCourseList(LoginTicket, AccountId, 'stu')
       .then(() => {
-        const { list } = this.props.course;
-        return Promise.all(_.map(list, (data, courseId) => {
+        const { info } = this.props.course;
+        return Promise.all(_.map(info, (data, courseId) => {
           _.each(_.range(1, 5), (listType) => {
             this.props.getCourseHomework(LoginTicket, AccountId, courseId, listType);
           });
@@ -63,9 +63,9 @@ class Schedule extends Component {
         }));
       })
       .then(() => {
-        const { list } = this.props.course;
-        this.props.groupCourseList();
-        return this.props.getSchedule(list);
+        const { info } = this.props.course;
+        this.props.groupCourseList(info);
+        return this.props.getSchedule(info);
       })
       .then(() => this.initSchedule())
       .then(() => this.setState({ loading: false }))

@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 
 const mapStateToProps = state => ({
+  course: state.course,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
@@ -15,8 +16,9 @@ const mapDispatchToProps = dispatch => bindActionCreators({
 class Course extends Component {
 
   render() {
-    const { course } = this.props.navigationState;
-    const { CourseName } = course;
+    const { info } = this.props.course;
+    const { CourseId } = this.props.navigationState;
+    const { CourseName } = info[CourseId];
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgb(157, 139, 220)' }}>
         <Text style={{ fontSize: 20, color: '#FFFFFF' }}>

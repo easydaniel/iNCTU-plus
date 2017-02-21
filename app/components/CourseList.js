@@ -38,10 +38,12 @@ class CourseList extends Component {
   }
 
   renderRow(course) {
-    const { CourseName, TeacherName } = course;
+    const { info } = this.props.course;
+    const { CourseId } = course;
+    const { CourseName, TeacherName } = info[CourseId];
     return (
       <TouchableWithoutFeedback
-        onPress={() => Actions.course({ course })}
+        onPress={() => Actions.course({ CourseId })}
       >
         <View style={styles.rowContainer}>
           <View style={styles.courseInfo}>
