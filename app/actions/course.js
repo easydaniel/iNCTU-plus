@@ -4,8 +4,8 @@ import {
   GetCourseTime,
   GetCourseHomework,
   GetCourseAnnouncement,
-} from '../api/requests';
-import { GetSchedule } from '../utils';
+} from 'app/api/requests';
+import { GetSchedule } from 'app/utils';
 
 export const getCourseList = createAction('GET_COURSE_LIST', GetCourseList);
 export const groupCourseList = createAction('GROUP_COURSE_LIST');

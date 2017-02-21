@@ -12,8 +12,8 @@ import {
   Keyboard,
 } from 'react-native';
 
-import styles from '../styles/auth';
-import * as AuthActions from '../actions/auth';
+import styles from 'app/styles/auth';
+import * as AuthActions from 'app/actions/auth';
 
 
 const mapStateToProps = state => ({

@@ -15,8 +15,8 @@ import {
 
 import Loading from './Loading';
 
-import styles from '../styles/course';
-import * as CourseActions from '../actions/course';
+import styles from 'app/styles/course';
+import * as CourseActions from 'app/actions/course';
 
 const mapStateToProps = state => ({
   auth: state.auth,

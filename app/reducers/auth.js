@@ -1,5 +1,4 @@
 import { handleActions } from 'redux-actions';
-import { modiftyData } from '../utils';
 
 const initialState = {
   user: null,
@@ -11,7 +10,7 @@ export default handleActions({
       const { AccountData } = payload;
       return {
         ...state,
-        user: modiftyData(AccountData),
+        user: AccountData,
       };
     },
     throw(state, { payload }) {

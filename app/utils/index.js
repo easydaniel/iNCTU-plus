@@ -67,8 +67,6 @@ export const sectionMap = {
   },
 };
 
-export const modiftyData = data => _.pickBy(data, (value, key) => !_.startsWith(key, '@'));
-
 export const SortByDay = (list) => {
   const week = _.times(7, _.stubArray);
   _.each(list, ({ CourseName, CourseTime, CourseId }) => {

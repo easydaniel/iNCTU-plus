@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import { Scene, Router } from 'react-native-router-flux';
 
 // Store
-import configureStore from '../store';
+import configureStore from 'app/store';
 
 // Components
 import Login from './Login';
@@ -15,7 +15,7 @@ import Basic from './Basic';
 // tabIcons
 import { CourseTabIcon, ScheduleTabIcon, SettingTabIcon } from './TabIcon';
 
-import styles from '../styles/application';
+import styles from 'app/styles/application';
 
 export default class Application extends Component {
 

@@ -18,8 +18,8 @@ import {
 
 import Loading from './Loading';
 
-import styles from '../styles/schedule';
-import * as CourseActions from '../actions/course';
+import styles from 'app/styles/schedule';
+import * as CourseActions from 'app/actions/course';
 
 import { sectionMap } from '../utils';
 

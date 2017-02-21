@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 
-import styles from '../styles/application';
+import styles from 'app/styles/application';
 
 export const ScheduleTabIcon = ({ selected, title }) => (
   <View style={styles.tabContainer}>

@@ -3,7 +3,7 @@ import { persistStore, autoRehydrate } from 'redux-persist';
 import { AsyncStorage } from 'react-native';
 import thunk from 'redux-thunk';
 import promiseMiddleware from 'redux-promise';
-import reducers from '../reducers';
+import reducers from 'app/reducers';
 
 
 const middleware = [thunk, promiseMiddleware];
