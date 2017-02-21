@@ -1,2 +1,5 @@
 dist/*
 node_modules/*
+src/js/actions
+src/js/api
+src/js/reducers
