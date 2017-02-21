@@ -6,6 +6,7 @@ const initialState = {
   list: null,
   schedule: null,
   semester: null,
+  time: null,
 };
 
 export default handleActions({
@@ -14,7 +15,12 @@ export default handleActions({
       const { ArrayOfCourseData: { CourseData } } = payload;
       return {
         ...state,
-        info: _.keyBy(_.map(CourseData, c => ({ ...c, Homework: {}, Announcement: {} })), 'CourseId'),
+        info: _.keyBy(
+                _.map(
+                  CourseData,
+                  c => ({ ...c, Homework: {}, Announcement: {} })),
+                'CourseId',
+                ),
       };
     },
     throw(state, { payload }) {
@@ -45,10 +51,19 @@ export default handleActions({
   GET_COURSE_TIME: {
     next(state, { payload }) {
       const { ArrayOfCourseTimeData: { CourseTimeData }, CourseId } = payload;
-      const CourseTime = _.map(CourseTimeData, ({ CourseName, CourseId, ...c }) => c);
+      const CourseTime = _.map(
+                            CourseTimeData,
+                            ({ CourseName, CourseId, ...c }) => c,
+                          );
       return {
         ...state,
-        info: { ...state.info, [CourseId]: { ...state.info[CourseId], CourseTime } },
+        info: {
+          ...state.info,
+          [CourseId]: {
+            ...state.info[CourseId],
+            CourseTime,
+          },
+        },
       };
     },
     throw(state, { payload }) {
@@ -107,10 +122,13 @@ export default handleActions({
   },
   GET_SCHEDULE: {
     next(state, { payload }) {
+      const date = new Date();
+      const CrsYear = date.getYear() - (date.getMonth() > 7 ? 11 : 12);
+      const CrsSemester = (date.getMonth() > 7 ? '上' : '下');
       return {
         ...state,
         schedule: payload,
-        semester: Object.keys(payload)[0],
+        semester: `${CrsYear}${CrsSemester}`,
       };
     },
     throw(state, { payload }) {
@@ -124,6 +142,19 @@ export default handleActions({
       return {
         ...state,
         semester: payload,
+      };
+    },
+    throw(state, { payload }) {
+      return {
+        ...state,
+      };
+    },
+  },
+  UPDATE_CURRENT_TIME: {
+    next(state, { payload }) {
+      return {
+        ...state,
+        time: payload,
       };
     },
     throw(state, { payload }) {

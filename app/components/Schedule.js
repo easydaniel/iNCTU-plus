@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { Actions } from 'react-native-router-flux';
 import _ from 'lodash';
 import EntypoIcons from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -12,7 +13,7 @@ import {
   LayoutAnimation,
   Dimensions,
   TouchableHighlight,
-  StatusBar,
+  TouchableWithoutFeedback,
 } from 'react-native';
 
 import Loading from './Loading';
@@ -68,7 +69,12 @@ class Schedule extends Component {
         return this.props.getSchedule(info);
       })
       .then(() => this.initSchedule())
-      .then(() => this.setState({ loading: false }))
+      .then(() => {
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);
+        this.setState({
+          loading: false,
+        });
+      })
       .done(() => this.dayScrollView.scrollTo({ x: (current - 1) * width, animated: false }));
   }
 
@@ -77,6 +83,7 @@ class Schedule extends Component {
     // Picker init
     Picker.init({
       pickerData: Object.keys(schedule),
+      selectedValue: [schedule],
       pickerTitleText: '選擇學期',
       pickerConfirmBtnText: '確定',
       pickerCancelBtnText: '',
@@ -116,7 +123,6 @@ class Schedule extends Component {
     const { schedule, semester } = this.props.course;
     return (loading ? <Loading /> :
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" />
       <View style={styles.scheduleActionContainer}>
         <TouchableHighlight
           style={styles.scheduleSelect}
@@ -158,7 +164,7 @@ class Schedule extends Component {
         style={styles.container}
       >
         {
-            schedule[semester].map((list, idx) => (
+            schedule[semester].map((s, idx) => (
               <View
                 style={styles.pageContainer}
                 key={idx}
@@ -168,35 +174,40 @@ class Schedule extends Component {
                   style={styles.dayContainer}
                 >
                   {(
-                    list.length === 0 ?
+                    s.length === 0 ?
                       <View>
                         <Text />
                       </View> :
-                    list.map(({ CourseName, Sections, RoomNo }) => (
-                      <View key={CourseName} style={styles.timeContainer}>
-                        <Text style={styles.courseName}>
-                          {CourseName}
-                        </Text>
-                        <EntypoIcons.Button
-                          style={styles.courseLocationContainer}
-                          name="location"
-                          backgroundColor={'transparent'}
-                          color={'rgb(228,129,132)'}
-                          size={18}
-                        >
-                          <Text style={styles.courseLocation}>{RoomNo}</Text>
-                        </EntypoIcons.Button>
-                        <MaterialCommunityIcons.Button
-                          style={styles.courseTimeContainer}
-                          name="clock"
-                          backgroundColor={'transparent'}
-                          color={'rgb(137,135,231)'}
-                          size={18}
-                        >
-                          <Text style={styles.courseTime}>{this.getTimeString(Sections)}</Text>
-                          <Text style={styles.courseSection}>{`時段: ${Sections.join('')}`}</Text>
-                        </MaterialCommunityIcons.Button>
-                      </View>
+                    s.map(({ CourseName, Sections, RoomNo, CourseId }) => (
+                      <TouchableWithoutFeedback
+                        key={CourseId}
+                        onPress={() => console.log(CourseId)}
+                      >
+                        <View style={styles.timeContainer}>
+                          <Text style={styles.courseName}>
+                            {CourseName}
+                          </Text>
+                          <EntypoIcons.Button
+                            style={styles.courseLocationContainer}
+                            name="location"
+                            backgroundColor={'transparent'}
+                            color={'rgb(228,129,132)'}
+                            size={18}
+                          >
+                            <Text style={styles.courseLocation}>{RoomNo}</Text>
+                          </EntypoIcons.Button>
+                          <MaterialCommunityIcons.Button
+                            style={styles.courseTimeContainer}
+                            name="clock"
+                            backgroundColor={'transparent'}
+                            color={'rgb(137,135,231)'}
+                            size={18}
+                          >
+                            <Text style={styles.courseTime}>{this.getTimeString(Sections)}</Text>
+                            <Text style={styles.courseSection}>{`時段: ${Sections.join('')}`}</Text>
+                          </MaterialCommunityIcons.Button>
+                        </View>
+                      </TouchableWithoutFeedback>
                     ))
                   )}
                 </ScrollView>

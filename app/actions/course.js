@@ -14,3 +14,4 @@ export const getCourseHomework = createAction('GET_COURSE_HOMEWORK', GetCourseHo
 export const getCourseAnnouncement = createAction('GET_COURSE_ANNOUNCEMENT', GetCourseAnnouncement);
 export const getSchedule = createAction('GET_SCHEDULE', GetSchedule);
 export const setSemester = createAction('SET_SEMESTER');
+export const updateCurrentTime = createAction('UPDATE_CURRENT_TIME');

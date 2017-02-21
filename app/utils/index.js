@@ -71,13 +71,14 @@ export const modiftyData = data => _.pickBy(data, (value, key) => !_.startsWith(
 
 export const SortByDay = (list) => {
   const week = _.times(7, _.stubArray);
-  _.each(list, ({ CourseName, CourseTime }) => {
+  _.each(list, ({ CourseName, CourseTime, CourseId }) => {
     _.range(1, 8).forEach((idx) => {
       if (_.find(CourseTime, ['WeekDay', idx.toString()])) {
         const { RoomNo } = _.head(CourseTime);
         week[idx - 1].push({
           CourseName,
           RoomNo,
+          CourseId,
           Sections: _.filter(CourseTime,
              ({ WeekDay }) => WeekDay === idx.toString()).map(({ Section }) => Section),
         });
