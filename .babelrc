@@ -1,0 +1,8 @@
+{
+  "presets": ["react-native"],
+  "plugins": [
+    [ "babel-plugin-module-alias", [
+      { "src": "./src/js", "expose": "js" }
+    ]]
+  ]
+}

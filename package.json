@@ -1,0 +1,43 @@
+{
+  "name": "iNCTUplus",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "test": "jest"
+  },
+  "dependencies": {
+    "babel": "^6.23.0",
+    "babel-plugin-module-alias": "^1.6.0",
+    "lodash": "^4.17.4",
+    "query-string": "^4.3.2",
+    "react": "15.4.2",
+    "react-native": "0.41.2",
+    "react-native-picker": "^4.0.18",
+    "react-native-router-flux": "^3.37.0",
+    "react-native-textinput-effects": "^0.3.0",
+    "react-native-vector-icons": "^4.0.0",
+    "react-redux": "^5.0.2",
+    "redux": "^3.6.0",
+    "redux-actions": "^1.2.1",
+    "redux-persist": "^4.3.1",
+    "redux-promise": "^0.5.3",
+    "redux-thunk": "^2.2.0",
+    "url": "^0.11.0",
+    "url-join": "^1.1.0"
+  },
+  "devDependencies": {
+    "babel-jest": "18.0.0",
+    "babel-preset-react-native": "1.9.1",
+    "eslint": "^3.15.0",
+    "eslint-config-airbnb": "^14.1.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^4.0.0",
+    "eslint-plugin-react": "^6.9.0",
+    "jest": "18.1.0",
+    "react-test-renderer": "15.4.2"
+  },
+  "jest": {
+    "preset": "react-native"
+  }
+}
