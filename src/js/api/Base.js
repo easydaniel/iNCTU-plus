@@ -1,9 +1,10 @@
-import fetch from 'isomorphic-fetch'
 import urlJoin from 'url-join'
+import urlTool from 'url'
 import qs from 'query-string'
 import { HOST, VERSION } from './Config'
+import _ from 'lodash'
 
-const combinePayload = (res: Promise, payload?: { [key: string]: any }) => {
+const combinePayload = (res, payload) => {
     return Promise.resolve(
         res.then((r) => ({
             ...r,
@@ -12,17 +13,17 @@ const combinePayload = (res: Promise, payload?: { [key: string]: any }) => {
     )
 }
 
-export default (url: string, options?: { [key: string]: any }={}) => {
-    let URL = urlJoin(HOST, VERSION, url)
+export default (url, options = {}) => {
+    url = urlJoin(HOST, VERSION, url)
     let body = options.body || {}
-    options.credentials = 'include'
-    const element = document.createElement('a')
-    element.href = URL
-    body = Object.assign(body, qs.parse(element.search))
+    let urlObject = urlTool.parse(url)
     if (!options.method || options.method.toLowerCase() === 'get') {
-        URL = `${element.href.replace(element.search, '')}?${qs.stringify(body)}`
+        urlObject.query = _.assign((qs.parse(urlObject.query) || {}), body)
+        url = urlTool.format(urlObject)
+        delete options.body
     }
-    return fetch(URL, options).then((res) => {
+    options.credentials = 'include'
+    return fetch(url, options).then((res) => {
         if (res.status >= 200 && res.status < 300) {
             return combinePayload(res.json(), body)
         } else {
