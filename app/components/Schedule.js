@@ -79,11 +79,11 @@ class Schedule extends Component {
   }
 
   initSchedule() {
-    const { schedule } = this.props.course;
+    const { schedule, semester } = this.props.course;
     // Picker init
     Picker.init({
       pickerData: Object.keys(schedule),
-      selectedValue: [schedule],
+      selectedValue: [semester],
       pickerTitleText: '選擇學期',
       pickerConfirmBtnText: '確定',
       pickerCancelBtnText: '',
