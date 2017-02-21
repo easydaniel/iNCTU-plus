@@ -1,3 +1,4 @@
+import fetch from 'isomorphic-fetch'
 import urlJoin from 'url-join'
 import urlTool from 'url'
 import qs from 'query-string'
