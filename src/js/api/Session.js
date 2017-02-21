@@ -1,8 +1,8 @@
-import ApiFetch from './Base'
+import ApiFetch from './Base';
 
 export default {
-    post: (data) => ApiFetch('/session/', {
-        method: 'POST',
-        body: data
-    })
-}
+  post: data => ApiFetch('/session/', {
+    method: 'POST',
+    body: data,
+  }),
+};
