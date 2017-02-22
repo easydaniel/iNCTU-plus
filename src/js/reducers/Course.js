@@ -38,4 +38,26 @@ export default handleActions({
       };
     },
   },
+  GETS_COURSE_HOMEWORK: {
+    next(state, { payload }) {
+      const { courseId, listType} = payload.request;
+      const { ArrayOfStuHomeworkData: { StuHomeworkData } } = payload;
+      const type = ['undone', 'peer', 'overdue', 'done'];
+      return {
+        ...state,
+        list: {
+          ...state.list,
+          [courseId]: {
+            ...state.list[courseId],
+            [type[listType - 1]]: _.keyBy(StuHomeworkData, 'HomeworkId'),
+          },
+        },
+      };
+    },
+    throw(state, { payload }) {
+      return {
+        ...state,
+      };
+    },
+  },
 }, initialState);
