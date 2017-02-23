@@ -1,5 +1,7 @@
 import { createAction } from 'redux-actions';
 import Api from 'js/api';
+import { GetSchedule } from 'js/utils';
+
 
 export default {
   gets: createAction('GETS_COURSE', Api.Course.gets),
@@ -12,5 +14,8 @@ export default {
   },
   Announcement: {
     gets: createAction('GETS_COURSE_ANNOUNCEMENT', Api.Course.Announcement.gets),
-  }
+  },
+  Schedule: {
+    get: createAction('GET_SCHEDULE', GetSchedule),
+  },
 };
