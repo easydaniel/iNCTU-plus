@@ -8,6 +8,7 @@ export default class extends Component {
         return (
             <StyleRoot>
                 <Containers.session.Session/>
+                <Containers.section.Curriculum/>
                 { process.env.NODE_ENV !== 'production' ? <Containers.DevTools/> : null }
             </StyleRoot>
         )

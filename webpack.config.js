@@ -52,6 +52,10 @@ module.exports = {
                 loader: 'style-loader!css-loader!stylus-loader'
             },
             {
+                test: /\.scss$/,
+                loader: 'style-loader!css-loader!sass-loader'
+            },
+            {
                 test: /\.json$/, loader: 'json'
             },
             {
