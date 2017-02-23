@@ -24,7 +24,6 @@ export default class extends Component {
         })
         .then(() => {
             const { info } = this.props.Course
-            console.log(info)
             return Promise.all(_.map(info, (data, courseId) => {
                 _.each(_.range(1, 5), (listType) => {
                     this.props.getsCourseHomework({
@@ -46,6 +45,9 @@ export default class extends Component {
                     courseId: courseId
                 })
             }))
+        })
+        .then(() => {
+            this.props.groupsCourse()
         })
     }
     render () {
