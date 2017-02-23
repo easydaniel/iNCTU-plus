@@ -23,9 +23,9 @@ export default class extends Component {
             })
         })
         .then(() => {
-            const { list } = this.props.Course
-            console.log(list)
-            return Promise.all(_.map(list, (data, courseId) => {
+            const { info } = this.props.Course
+            console.log(info)
+            return Promise.all(_.map(info, (data, courseId) => {
                 _.each(_.range(1, 5), (listType) => {
                     this.props.getsCourseHomework({
                         loginTicket: this.props.Session.LoginTicket,
