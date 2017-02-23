@@ -2,9 +2,11 @@ import { handleActions } from 'redux-actions';
 import _ from 'lodash';
 
 const initialState = {
+  info: null,
   list: null,
   schedule: null,
   semester: null,
+  time: null,
 };
 
 export default handleActions({
@@ -13,7 +15,31 @@ export default handleActions({
       const { ArrayOfCourseData: { CourseData } } = payload;
       return {
         ...state,
-        list: _.keyBy(CourseData, 'CourseId'),
+        info: _.keyBy(
+                _.map(
+                  CourseData,
+                  c => ({ ...c, Homework: {}, Announcement: {} })),
+                'CourseId',
+                ),
+      };
+    },
+    throw(state, { payload }) {
+      return {
+        ...state,
+      };
+    },
+  },
+  GROUPS_COURSE: {
+    next(state, { payload }) {
+      return {
+        ...state,
+        list: _.groupBy(
+          _.map(
+            payload,
+            ({ CourseId, CrsYear, CrsSemester }) => ({ CourseId, CrsYear, CrsSemester }),
+          ),
+          ({ CrsYear, CrsSemester }) => (CrsYear + CrsSemester),
+        ),
       };
     },
     throw(state, { payload }) {
@@ -24,12 +50,21 @@ export default handleActions({
   },
   GET_COURSE_TIME: {
     next(state, { payload }) {
-      const CourseId = payload.request.CourseId
+      const { courseId } = payload.request
       const { ArrayOfCourseTimeData: { CourseTimeData } } = payload;
-      const CourseTime = _.map(CourseTimeData, ({ CourseName, CourseId, ...c }) => c);
+      const CourseTime = _.map(
+        CourseTimeData,
+        ({ CourseName, CourseId, ...c }) => c,
+      );
       return {
         ...state,
-        list: { ...state.list, [CourseId]: { ...state.list[CourseId], CourseTime } },
+        info: {
+          ...state.info,
+          [courseId]: {
+            ...state.info[courseId],
+            CourseTime,
+          },
+        },
       };
     },
     throw(state, { payload }) {
@@ -45,11 +80,14 @@ export default handleActions({
       const type = ['undone', 'peer', 'overdue', 'done'];
       return {
         ...state,
-        list: {
-          ...state.list,
+        info: {
+          ...state.info,
           [courseId]: {
-            ...state.list[courseId],
-            [type[listType - 1]]: _.keyBy(StuHomeworkData, 'HomeworkId'),
+            ...state.info[courseId],
+            Homework: {
+              ...state.info[courseId].Homework,
+              [type[listType - 1]]: _.keyBy(StuHomeworkData, 'HomeworkId'),
+            },
           },
         },
       };
@@ -67,11 +105,14 @@ export default handleActions({
       const type = ['new', 'old'];
       return {
         ...state,
-        list: {
-          ...state.list,
+        info: {
+          ...state.info,
           [courseId]: {
-            ...state.list[courseId],
-            [type[bulType - 1]]: _.keyBy(BulletinData, 'BulletinId'),
+            ...state.info[courseId],
+            Announcement: {
+              ...state.info[courseId].Announcement,
+              [type[bulType - 1]]: _.keyBy(BulletinData, 'BulletinId'),
+            },
           },
         },
       };
