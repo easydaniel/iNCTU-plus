@@ -7,7 +7,9 @@ import { HOST, VERSION } from './Config';
 const combinePayload = (res, payload) => Promise.resolve(
         res.then(r => ({
           ...r,
-          payload,
+          request: {
+            ...payload
+          },
         })),
     );
 
