@@ -14,7 +14,7 @@ export default (url, options = {}) => {
   let u = uj(HOST, VERSION, url);
   let opt = { ...options };
   const { body } = options;
-  const urlObject = urlTool.parse(url);
+  const urlObject = urlTool.parse(u);
   if (!opt.method || opt.method.toLowerCase() === 'get') {
     urlObject.query = { ...qs.parse(urlObject.query), ...body };
     u = urlTool.format(urlObject);
