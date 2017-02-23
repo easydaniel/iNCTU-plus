@@ -18,4 +18,7 @@ export default {
   Schedule: {
     get: createAction('GET_SCHEDULE', GetSchedule),
   },
+  Semester: {
+    set: createAction('SET_SEMESETER'),
+  },
 };

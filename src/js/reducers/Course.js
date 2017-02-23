@@ -140,4 +140,17 @@ export default handleActions({
       };
     },
   },
+  SET_SEMESETER: {
+    next(state, { payload }) {
+      return {
+        ...state,
+        semester: payload,
+      };
+    },
+    throw(state, { payload }) {
+      return {
+        ...state,
+      };
+    },
+  },
 }, initialState);
