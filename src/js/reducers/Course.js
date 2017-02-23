@@ -40,7 +40,7 @@ export default handleActions({
   },
   GETS_COURSE_HOMEWORK: {
     next(state, { payload }) {
-      const { courseId, listType} = payload.request;
+      const { courseId, listType } = payload.request;
       const { ArrayOfStuHomeworkData: { StuHomeworkData } } = payload;
       const type = ['undone', 'peer', 'overdue', 'done'];
       return {
@@ -50,6 +50,28 @@ export default handleActions({
           [courseId]: {
             ...state.list[courseId],
             [type[listType - 1]]: _.keyBy(StuHomeworkData, 'HomeworkId'),
+          },
+        },
+      };
+    },
+    throw(state, { payload }) {
+      return {
+        ...state,
+      };
+    },
+  },
+  GETS_COURSE_ANNOUNCEMENT: {
+    next(state, { payload }) {
+      const { courseId, bulType } = payload.request;
+      const { ArrayOfBulletinData: { BulletinData } } = payload;
+      const type = ['new', 'old'];
+      return {
+        ...state,
+        list: {
+          ...state.list,
+          [courseId]: {
+            ...state.list[courseId],
+            [type[bulType - 1]]: _.keyBy(BulletinData, 'BulletinId'),
           },
         },
       };
