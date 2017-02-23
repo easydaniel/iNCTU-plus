@@ -24,7 +24,7 @@ export default handleActions({
   },
   GET_COURSE_TIME: {
     next(state, { payload }) {
-      const CourseId = payload.request.CourseId
+      const CourseId = payload.request.CourseId;
       const { ArrayOfCourseTimeData: { CourseTimeData } } = payload;
       const CourseTime = _.map(CourseTimeData, ({ CourseName, CourseId, ...c }) => c);
       return {
@@ -40,7 +40,7 @@ export default handleActions({
   },
   GETS_COURSE_HOMEWORK: {
     next(state, { payload }) {
-      const { courseId, listType} = payload.request;
+      const { courseId, listType } = payload.request;
       const { ArrayOfStuHomeworkData: { StuHomeworkData } } = payload;
       const type = ['undone', 'peer', 'overdue', 'done'];
       return {

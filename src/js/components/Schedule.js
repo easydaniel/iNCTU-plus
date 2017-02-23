@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Actions } from 'react-native-router-flux';
+import { Actions as Router } from 'react-native-router-flux';
 import _ from 'lodash';
 import EntypoIcons from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -19,13 +19,16 @@ import {
 import Loading from './Loading';
 
 import styles from 'js/styles/schedule';
-// import * as CourseActions from 'js/actions/course';
+import Actions from 'js/actions';
 
 import { sectionMap } from 'js/utils';
 
-const mapStateToProps = ({ Session }) => ({ Session });
+const mapStateToProps = ({ Session, Course }) => ({ Session, Course });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
+  getCourse: Actions.Course.gets,
+  getTime: Actions.Course.Time.get,
+  getHomework: Actions.Course.Homework.gets,
 }, dispatch);
 
 const { width } = Dimensions.get('window');
@@ -37,14 +40,26 @@ class Schedule extends Component {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);
     this.state = {
       loading: true,
-      delay: true,
       current: null,
     };
   }
 
   componentWillMount() {
-    console.log('hello');
     const { Session: { LoginTicket, AccountId } } = this.props;
+    const data = {
+      loginTicket: LoginTicket,
+      accountId: AccountId,
+      role: 'stu',
+    };
+    this.props.getCourse(data)
+      .then((val) => {
+        const { Course: { list } } = this.props;
+        return Promise.all(_.map(info, (data, courseId) => {
+          _.each(_.range(1, 5), (listType) => {
+            this.props.getHomework();
+          });
+        }));
+      });
     const current = (new Date().getDay() + 8) % 8;
     this.setState({ current });
     // this.props.getCourseList(LoginTicket, AccountId, 'stu')
@@ -91,7 +106,6 @@ class Schedule extends Component {
     });
     Picker.hide();
     // Make sure scroll event not fired
-    setTimeout(() => this.setState({ delay: false }), 200);
   }
 
   handleScroll(evt) {

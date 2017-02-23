@@ -11,7 +11,7 @@ export default {
   },
   Homework: {
     gets: data => ApiFetch('/course/homeworks/', {
-      body: data
-    })
-  }
+      body: data,
+    }),
+  },
 };

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Actions } from 'react-native-router-flux';
+import { Actions as Router } from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Sae } from 'react-native-textinput-effects';
 import {
@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 
 import styles from 'js/styles/auth';
-import Functions from 'js/actions';
+import Actions from 'js/actions';
 
 
 const mapStateToProps = ({ Session }) => ({
@@ -21,7 +21,7 @@ const mapStateToProps = ({ Session }) => ({
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  ...Functions.Session,
+  postSession: Actions.Session.post,
 }, dispatch);
 
 class Login extends Component {
@@ -41,8 +41,8 @@ class Login extends Component {
     const form = new FormData();
     form.append('account', account);
     form.append('password', password);
-    this.props.post(form)
-      .done(({ error }) => (error ? this.setState({ status: 'RETRY' }) : Actions.tabbar()));
+    this.props.postSession(form)
+      .done(({ error }) => (error ? this.setState({ status: 'RETRY' }) : Router.tabbar()));
   }
 
   render() {
