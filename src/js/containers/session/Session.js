@@ -10,7 +10,8 @@ const mapDispatchToProps = (dispatch) => ({
     groupsCourse: () => dispatch(Actions.Course.groups()),
     getCourseTime: (data) => dispatch(Actions.Course.Time.get(data)),
     getsCourseHomework: (data) => dispatch(Actions.Course.Homework.gets(data)),
-    getsCourseAnnouncement: (data) => dispatch(Actions.Course.Announcement.gets(data))
+    getsCourseAnnouncement: (data) => dispatch(Actions.Course.Announcement.gets(data)),
+    getSchedule: (data) => dispatch(Actions.Course.Schedule.get(data))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Components.session.Session)

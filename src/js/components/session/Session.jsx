@@ -49,6 +49,9 @@ export default class extends Component {
         .then(() => {
             this.props.groupsCourse()
         })
+        .then(() => {
+            this.props.getSchedule(this.props.Course.info)
+        })
     }
     render () {
         return (
