@@ -188,6 +188,7 @@ Main Components
     @include MQ(S) {
         .single-event {
             width: 40%;
+            min-height: 150px !important;
         }
     }
 
@@ -229,8 +230,8 @@ Main Components
 
         .events-group > ul {
             @include clearfix;
-            // 19 is the number of list items in the .timeline
-            height: $row-height*19;
+            // 12 is the number of list items in the .timeline
+            height: $row-height*12;
             /* reset style */
             display: block;
             overflow: visible;
@@ -246,6 +247,7 @@ Main Components
             position: absolute;
             z-index: 3;
             /* top position and height will be set using js */
+            min-height: 100px !important;
             width: calc(100% + 2px);
             left: -1px;
             box-shadow: 0 10px 20px rgba(#000, .1), inset 0 -3px 0 rgba(#000, .2);

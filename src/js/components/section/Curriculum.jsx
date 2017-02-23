@@ -1,53 +1,14 @@
 import React, { Component } from 'react'
 import CSSModules from 'react-css-modules'
-
 export default CSSModules(class Inctu extends Component {
     constructor (props) {
         super(props)
         this.refreshData = this.refreshData.bind(this)
+        this.checkType = this.checkType.bind(this)
+        this.mapType = this.mapType.bind(this)
         this.state = {
-            fakeData: [
-                [
-                    {
-                        name: 'AI 人工智慧',
-                        start_time: '9:00',
-                        end_time: '12:00',
-                        start_period: 0,
-                        duration: 4,
-                        type: 0
-                    },
-                    {
-                        name: 'UX 使用者評估',
-                        start_time: '13:00',
-                        end_time: '15:00',
-                        start_period: 8,
-                        duration: 4,
-                        type: 1
-                    }
-                ],
-                [
-                    {
-                        name: '通識 痴漢智慧',
-                        start_time: '10:00',
-                        end_time: '12:00',
-                        start_period: 2,
-                        duration: 4,
-                        type: 0
-                    },
-                    {
-                        name: '語言 德文',
-                        start_time: '13:00',
-                        end_time: '15:00',
-                        start_period: 8,
-                        duration: 4,
-                        type: 1
-                    }
-                ],
-                [],
-                [],
-                []
-            ],
-            fakeDate: [
+            fakeData: [],
+            WeekDay: [
                 'Mon',
                 'Tue',
                 'Wed',
@@ -55,11 +16,103 @@ export default CSSModules(class Inctu extends Component {
                 'Fri',
                 'Sat',
                 'Sun'
+            ],
+            periodList: [
+                {
+                    'start': '8:00',
+                    'end': '8:50'
+                },
+                {
+                    'start': '9:00',
+                    'end': '9:50'
+                },
+                {
+                    'start': '10:10',
+                    'end': '11:00'
+                },
+                {
+                    'start': '11:10',
+                    'end': '12:00'
+                },
+                {
+                    'start': '13:20',
+                    'end': '14:10'
+                },
+                {
+                    'start': '14:20',
+                    'end': '15:10'
+                },
+                {
+                    'start': '15:30',
+                    'end': '16:20'
+                },
+                {
+                    'start': '16:30',
+                    'end': '17:20'
+                }
             ]
         }
     }
+    checkType (val) {
+        switch (val.slice(0, 1)) {
+            case '1':
+                return 1
+            case '7':
+                return 2
+            case '8':
+                return 3
+            default:
+                return 4
+        }
+    }
+    mapType (val, list) {
+        let target = 1
+        list.map((el) => {
+            if (el.courseName === val) {
+                target = el.courseType
+            }
+        })
+        return target
+    }
     refreshData () {
-        console.log(this.props.Course.list)
+        let typeList = []
+        let tempDataId = this.props.Course.info
+        for (var key in tempDataId) {
+            var obj = tempDataId[key]
+            if (obj.CrsYear === '105' && obj.CrsSemester === '下') {
+                typeList.push({
+                    courseName: obj.CourseName,
+                    courseType: this.checkType(obj.CourseNo)
+                })
+            }
+        }
+
+        let tempData = this.props.Course.schedule['105下']
+        let pushData = []
+        tempData.map((dayObj) => {
+            let oneDayList = []
+            dayObj.map((el) => {
+                let classObj = {
+                    name: '',
+                    start_time: '',
+                    end_time: '',
+                    start_period: 0,
+                    duration: 0,
+                    type: 1
+                }
+                let sp = el.Sections[0].charCodeAt(0) - 64
+                classObj['name'] = el.CourseName
+                classObj['start_period'] = sp
+                classObj['duration'] = el.Sections.length
+                classObj['start_time'] = this.state.periodList[sp - 1]['start']
+                classObj['end_time'] = this.state.periodList[sp + el.Sections.length - 2]['end']
+                classObj['type'] = this.mapType(el.CourseName, typeList)
+                oneDayList.push(classObj)
+            })
+            pushData.push(oneDayList)
+        })
+        console.log(pushData)
+        this.setState({fakeData: pushData})
     }
     render () {
         return (
@@ -70,25 +123,19 @@ export default CSSModules(class Inctu extends Component {
                 }}>
                     <div className="timeline">
                         <ul>
+                            <li><span>08:00</span></li>
                             <li><span>09:00</span></li>
-                            <li><span>09:30</span></li>
-                            <li><span>10:00</span></li>
-                            <li><span>10:30</span></li>
-                            <li><span>11:00</span></li>
-                            <li><span>11:30</span></li>
-                            <li><span>12:00</span></li>
-                            <li><span>12:30</span></li>
-                            <li><span>13:00</span></li>
-                            <li><span>13:30</span></li>
-                            <li><span>14:00</span></li>
-                            <li><span>14:30</span></li>
-                            <li><span>15:00</span></li>
+                            <li><span>10:10</span></li>
+                            <li><span>11:10</span></li>
+                            {/* <li><span>12:30</span></li> */}
+                            <li><span>13:20</span></li>
+                            <li><span>14:20</span></li>
                             <li><span>15:30</span></li>
-                            <li><span>16:00</span></li>
                             <li><span>16:30</span></li>
-                            <li><span>17:00</span></li>
-                            <li><span>17:30</span></li>
-                            <li><span>18:00</span></li>
+                            <li><span>18:30</span></li>
+                            <li><span>19:30</span></li>
+                            <li><span>20:30</span></li>
+                            <li><span>21:30</span></li>
                         </ul>
                     </div>
                     <div className="events">
@@ -96,7 +143,7 @@ export default CSSModules(class Inctu extends Component {
                             {
                                 this.state.fakeData.map((el, id) =>
                                     <li key={id} className="events-group">
-                                        <div className="top-info"><span>{this.state.fakeDate[id]}</span></div>
+                                        <div className="top-info"><span>{this.state.WeekDay[id]}</span></div>
                                         <ul>
                                             {
                                                 el.map((box, index) =>
@@ -105,10 +152,10 @@ export default CSSModules(class Inctu extends Component {
                                                         className="single-event"
                                                         data-start={box.start_time}
                                                         data-end={box.end_time}
-                                                        data-event={box.type === 0 ? `event-1` : `event-4`}
+                                                        data-event={`event-` + box.type}
                                                         style={{
-                                                            top: (() => box.start_period * 50)(),
-                                                            height: (() => box.duration * 50)()
+                                                            top: (() => (box.start_period - 1) * 80)(),
+                                                            height: (() => box.duration * 80)()
                                                         }}>
                                                         <a href={`#` + index}>
                                                             <span className="event-date">{box.start_time} - {box.end_time}</span>
