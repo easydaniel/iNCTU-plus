@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import Radium from 'radium'
+import _ from 'lodash'
 
 @Radium
 export default class extends Component {
@@ -14,6 +15,38 @@ export default class extends Component {
     postSession () {
         const data = new FormData(ReactDOM.findDOMNode(this.refs.sessionForm))
         this.props.postSession(data)
+        .then(() => {
+            return this.props.getsCourse({
+                loginTicket: this.props.Session.LoginTicket,
+                accountId: this.props.Session.AccountId,
+                role: 'stu'
+            })
+        })
+        .then(() => {
+            const { list } = this.props.Course
+            console.log(list)
+            return Promise.all(_.map(list, (data, courseId) => {
+                _.each(_.range(1, 5), (listType) => {
+                    this.props.getsCourseHomework({
+                        loginTicket: this.props.Session.LoginTicket,
+                        accountId: this.props.Session.AccountId,
+                        courseId: courseId,
+                        listType: listType
+                    })
+                })
+                _.each(_.range(1, 3), (bulType) => {
+                    this.props.getsCourseAnnouncement({
+                        loginTicket: this.props.Session.LoginTicket,
+                        courseId: courseId,
+                        bulType: bulType
+                    })
+                })
+                return this.props.getCourseTime({
+                    loginTicket: this.props.Session.LoginTicket,
+                    courseId: courseId
+                })
+            }))
+        })
     }
     render () {
         return (
