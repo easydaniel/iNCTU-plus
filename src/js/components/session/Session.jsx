@@ -25,6 +25,7 @@ export default class extends Component {
         .then(() => {
             const { info } = this.props.Course
             return Promise.all(_.map(info, (data, courseId) => {
+                /*
                 _.each(_.range(1, 5), (listType) => {
                     this.props.getsCourseHomework({
                         loginTicket: this.props.Session.LoginTicket,
@@ -40,6 +41,7 @@ export default class extends Component {
                         bulType: bulType
                     })
                 })
+                */
                 return this.props.getCourseTime({
                     loginTicket: this.props.Session.LoginTicket,
                     courseId: courseId
@@ -51,6 +53,9 @@ export default class extends Component {
         })
         .then(() => {
             this.props.getSchedule(this.props.Course.info)
+        })
+        .then(() => {
+            this.props.setSemester('105上')
         })
     }
     render () {
