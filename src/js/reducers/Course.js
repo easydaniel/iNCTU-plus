@@ -123,4 +123,21 @@ export default handleActions({
       };
     },
   },
+  GET_SCHEDULE: {
+    next(state, { payload }) {
+      const date = new Date();
+      const CrsYear = date.getYear() - (date.getMonth() > 7 ? 11 : 12);
+      const CrsSemester = (date.getMonth() > 7 ? '上' : '下');
+      return {
+        ...state,
+        schedule: payload,
+        semester: `${CrsYear}${CrsSemester}`,
+      };
+    },
+    throw(state, { payload }) {
+      return {
+        ...state,
+      };
+    },
+  },
 }, initialState);
