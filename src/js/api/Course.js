@@ -11,7 +11,12 @@ export default {
   },
   Homework: {
     gets: data => ApiFetch('/course/homeworks/', {
-      body: data
-    })
-  }
+      body: data,
+    }),
+  },
+  Announcement: {
+    gets: data => ApiFetch('/course/announcements/', {
+      body: data,
+    }),
+  },
 };

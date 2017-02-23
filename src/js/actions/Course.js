@@ -9,4 +9,7 @@ export default {
   Homework: {
     gets: createAction('GETS_COURSE_HOMEWORK', Api.Course.Homework.gets),
   },
+  Announcement: {
+    gets: createAction('GETS_COURSE_ANNOUNCEMENT', Api.Course.Announcement.gets),
+  }
 };
