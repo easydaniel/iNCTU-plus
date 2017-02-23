@@ -30,12 +30,12 @@ export default handleActions({
     },
   },
   GROUPS_COURSE: {
-    next(state, { payload }) {
+    next(state) {
       return {
         ...state,
         list: _.groupBy(
           _.map(
-            payload,
+            state.info,
             ({ CourseId, CrsYear, CrsSemester }) => ({ CourseId, CrsYear, CrsSemester }),
           ),
           ({ CrsYear, CrsSemester }) => (CrsYear + CrsSemester),
