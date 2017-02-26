@@ -1,0 +1,150 @@
+$primary-color = #00E9D3
+$second-color = #1751c6
+$bg-color = #EFEFEF
+@font-face
+    font-family: 'Druk Web'
+    src: url("./../../../parallax/fonts/Druk-Bold-Web.ttf")
+    font-weight: 700
+    font-style: normal
+    font-stretch: normal
+.login_container
+    margin: 0
+    padding: 0
+    position: relative
+    display: flex
+    justify-content: center
+    width: 100vw
+    height: 100vh
+    .login_front
+        z-index: 10
+        width: 100%
+        padding: 50px
+        h1
+            font-size: 84px
+            font-size: 8.4rem
+            line-height: 0.812
+            letter-spacing: 0.02em
+            font-family: "Druk Web",Arial,sans-serif
+            font-weight: 700
+            font-style: normal
+            margin: auto
+            text-transform: uppercase
+            color: $primary-color
+            -webkit-transform: translate3d(0, 0, 0)
+            transform: translate3d(0, 0, 0)
+            @media (min-width: 48em)
+                font-size: 15.4rem
+            @media (min-width: 31.25em)
+                font-size: 12.4rem
+        .caption_wrapper
+            h5
+                display: inline-block
+                position: relative
+                font-family: "Druk Web",Arial,sans-serif
+                text-transform: uppercase
+                font-weight: 700
+                font-size: 3.5rem
+                position: relative
+                cursor: pointer
+                color: $second-color
+                transition: all 0.3s ease
+                &:before
+                    content: ''
+                    position: absolute
+                    background: $primary-color
+                    height: 3px
+                    width: 100%
+                    bottom: -2px
+                    left: 0px
+                &:hover
+                    color: $primary-color
+                    transition: all 0.25s ease
+                    &:before
+                        background: transparent
+                        transition: all 0.25s ease
+        .submit_btn
+            display: flex
+            flex-direction: column
+
+        form
+            margin-top: 50px
+            display: flex
+            flex-direction: column
+            input
+                -webkit-user-select auto
+                user-select auto
+            input[type="text"],input[type="password"],#password
+                display block
+                width 340px
+                height 40px
+                font-size 1em
+                font-weight 700
+                padding 5px 10px
+                line-height 35px
+                letter-spacing 1px
+                margin-bottom 15px
+                border 3px solid $second-color
+                border-radius 0px
+                color $second-color
+                background transparent
+                outline none
+                transition border-color .35s ease,color .35s ease
+                :focus
+                    border 3px solid $second-color
+
+
+    .login_bg
+        z-index: -1
+        overflow: hidden
+        position: absolute
+        top: 0
+        left: 0
+        width: 100%
+        height: 100%
+        background: $bg-color
+        ul
+            width: 100%
+            height: 100%
+            li
+                width: 15%
+                height: auto
+                img
+                    width: 100%
+                    height: auto
+
+::-webkit-input-placeholder/* WebKit, Blink, Edge */
+  color #F1FAFB
+  font-weight 400
+  font-size 1.4em
+:-moz-placeholder /* Mozilla Firefox 4 to 18 */
+  color #F1FAFB
+  font-weight 400
+::-moz-placeholder/* Mozilla Firefox 19+ */
+  color #F1FAFB
+  font-weight 400
+
+
+//
+// $primary-color = #459D72
+// $second-color = #342B2B
+// $bg-color = #DEFBC2
+//
+// $primary-color = #2C3E50
+// $second-color = #ECF0F1
+// $bg-color = #BDC3C7
+//
+// $primary-color = #FF7E67
+// $second-color = #07689F
+// $bg-color = #A2D5F2
+//
+// $primary-color = #F03861
+// $second-color = #362391
+// $bg-color = #F6EB9A
+// 
+// $primary-color = #BB5A5A
+// $second-color = #E79E85
+// $bg-color = #F2E9D0
+//
+// $primary-color = #00E9D3
+// $second-color = #1751c6
+// $bg-color = #EFEFEF

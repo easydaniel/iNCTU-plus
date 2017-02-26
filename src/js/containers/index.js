@@ -1,11 +1,13 @@
+import announcement from './announcement'
+import curriculum from './curriculum'
 import session from './session'
-import section from './section'
 import App from './App'
 import DevTools from './DevTools'
 
 export default {
+    announcement,
+    curriculum,
     session,
-    section,
     App,
     DevTools
 }

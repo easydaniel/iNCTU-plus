@@ -1,11 +1,14 @@
 import React, { Component } from 'react'
 import CSSModules from 'react-css-modules'
+import { Link } from 'react-router'
+
 export default CSSModules(class Inctu extends Component {
     constructor (props) {
         super(props)
         this.refreshData = this.refreshData.bind(this)
         this.checkType = this.checkType.bind(this)
         this.mapType = this.mapType.bind(this)
+        this.mapId = this.mapId.bind(this)
         this.state = {
             fakeData: [],
             WeekDay: [
@@ -35,6 +38,10 @@ export default CSSModules(class Inctu extends Component {
                     'end': '12:00'
                 },
                 {
+                    'start': '12:20',
+                    'end': '13:10'
+                },
+                {
                     'start': '13:20',
                     'end': '14:10'
                 },
@@ -49,6 +56,10 @@ export default CSSModules(class Inctu extends Component {
                 {
                     'start': '16:30',
                     'end': '17:20'
+                },
+                {
+                    'start': '17:30',
+                    'end': '18:20'
                 }
             ]
         }
@@ -74,6 +85,15 @@ export default CSSModules(class Inctu extends Component {
         })
         return target
     }
+    mapId (val, list) {
+        let target = ''
+        list.map((el) => {
+            if (el.courseName === val) {
+                target = el.courseId
+            }
+        })
+        return target
+    }
     refreshData () {
         let typeList = []
         let tempDataId = this.props.Course.info
@@ -82,7 +102,8 @@ export default CSSModules(class Inctu extends Component {
             if (obj.CrsYear === '105' && obj.CrsSemester === '下') {
                 typeList.push({
                     courseName: obj.CourseName,
-                    courseType: this.checkType(obj.CourseNo)
+                    courseType: this.checkType(obj.CourseNo),
+                    courseId: obj.CourseId
                 })
             }
         }
@@ -93,6 +114,7 @@ export default CSSModules(class Inctu extends Component {
             let oneDayList = []
             dayObj.map((el) => {
                 let classObj = {
+                    id: '',
                     name: '',
                     start_time: '',
                     end_time: '',
@@ -100,12 +122,14 @@ export default CSSModules(class Inctu extends Component {
                     duration: 0,
                     type: 1
                 }
-                let sp = el.Sections[0].charCodeAt(0) - 64
+                let sp = (el.Sections[0].charCodeAt(0) - 64)
+                sp = (sp > 4 ? sp + 1 : sp)
                 classObj['name'] = el.CourseName
                 classObj['start_period'] = sp
                 classObj['duration'] = el.Sections.length
                 classObj['start_time'] = this.state.periodList[sp - 1]['start']
                 classObj['end_time'] = this.state.periodList[sp + el.Sections.length - 2]['end']
+                classObj['id'] = this.mapId(el.CourseName, typeList)
                 classObj['type'] = this.mapType(el.CourseName, typeList)
                 oneDayList.push(classObj)
             })
@@ -114,10 +138,13 @@ export default CSSModules(class Inctu extends Component {
         console.log(pushData)
         this.setState({fakeData: pushData})
     }
+    componentDidMount () {
+        this.refreshData()
+    }
     render () {
         return (
             <div>
-                <div onClick={this.refreshData}>reFresh</div>
+                {/* <div onClick={this.refreshData}>reFresh</div> */}
                 <div className="cd-schedule" style={{
                     textAlign: 'left'
                 }}>
@@ -127,15 +154,16 @@ export default CSSModules(class Inctu extends Component {
                             <li><span>09:00</span></li>
                             <li><span>10:10</span></li>
                             <li><span>11:10</span></li>
-                            {/* <li><span>12:30</span></li> */}
+                            <li><span>12:00</span></li>
                             <li><span>13:20</span></li>
                             <li><span>14:20</span></li>
                             <li><span>15:30</span></li>
                             <li><span>16:30</span></li>
+                            <li><span>17:20</span></li>
                             <li><span>18:30</span></li>
-                            <li><span>19:30</span></li>
+                            <li><span>19:20</span></li>
                             <li><span>20:30</span></li>
-                            <li><span>21:30</span></li>
+                            <li><span>21:20</span></li>
                         </ul>
                     </div>
                     <div className="events">
@@ -156,12 +184,10 @@ export default CSSModules(class Inctu extends Component {
                                                         style={{
                                                             top: (() => (box.start_period - 1) * 80)(),
                                                             height: (() => box.duration * 80)()
-                                                        }}>
-                                                        <a href={`#` + index}>
+                                                        }}><Link to={`${box.id}/announcement`}>
                                                             <span className="event-date">{box.start_time} - {box.end_time}</span>
                                                             <em className="event-name">{box.name}</em>
-                                                        </a>
-                                                    </li>
+                                                    </Link></li>
                                                 )
                                             }
                                         </ul>

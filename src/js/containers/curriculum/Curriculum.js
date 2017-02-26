@@ -9,4 +9,4 @@ const mapStateToProps = (state, ownProps) => ({
 const mapDispatchToProps = (dispatch) => ({
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(Components.section.Curriculum)
+export default connect(mapStateToProps, mapDispatchToProps)(Components.curriculum.Curriculum)

@@ -231,7 +231,7 @@ Main Components
         .events-group > ul {
             @include clearfix;
             // 12 is the number of list items in the .timeline
-            height: $row-height*12;
+            height: $row-height* $period;
             /* reset style */
             display: block;
             overflow: visible;
@@ -298,7 +298,7 @@ Main Components
     font-size: 2.4rem;
 
     @include MQ(M) {
-        font-size: 2rem;
+        font-size: 1.5rem;
     }
 }
 
