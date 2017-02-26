@@ -100,9 +100,7 @@ export default CSSModules(class Session extends Component {
         })
     }
     componentDidMount () {
-        console.log(Parallax)
         this.parallax = new Parallax(this.refs.ul)
-        console.log(this.parallax)
     }
     componentWillUnmount () {
         this.parallax.disable()
@@ -150,6 +148,4 @@ export default CSSModules(class Session extends Component {
             </div>
         )
     }
-// }
-// }, require('./../../../parallax/styles/main.css'))
 }, require('./Session.styl'))

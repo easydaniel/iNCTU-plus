@@ -200,4 +200,5 @@ export default CSSModules(class Inctu extends Component {
             </div>
         )
     }
+// })
 }, require('./../../../scss/curriculum/scss/style.scss'))
